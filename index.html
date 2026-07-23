@@ -42,7 +42,8 @@
         }
         #app:not(.app-ready) { visibility: hidden; }
         body.is-booting { overflow: hidden; }
-        #page-loader {
+        #page-loader { display: none !important; }
+        #page-loader-unused {
             position: fixed;
             inset: 0;
             z-index: 9999;
@@ -489,7 +490,7 @@
 </head>
 <body class="bg-ivory-light text-charcoal font-sans transition-colors duration-300 dark:bg-stone-950 dark:text-stone-200 min-h-screen flex flex-col is-booting">
 
-<div id="page-loader" aria-live="polite" aria-busy="true">
+<div id="page-loader" aria-live="polite" aria-busy="true" style="display:none">
     <div class="loader-photo-wrap">
         <img id="loader-photo" class="loader-photo hidden" alt="" decoding="sync">
         <div id="loader-mark-fallback" class="loader-mark hidden">閔</div>
@@ -873,7 +874,7 @@
                     <ul class="space-y-3 text-xs">
                         <li v-for="(award, idx) in db.about.awards" :key="idx" class="p-3 bg-white dark:bg-stone-900 border border-stone-200/20 rounded-sm flex justify-between items-center">
                             <span class="font-medium text-charcoal dark:text-stone-200">{{ award.title[lang] }}</span>
-                            <span class="text-stone-400 shrink-0 ml-4 text-[11px]">{{ award.year }}</span>
+                            <span class="text-stone-600 shrink-0 ml-4 text-[11px]">{{ award.year }}</span>
                         </li>
                     </ul>
                 </div>
@@ -886,7 +887,7 @@
                         <li v-for="(grant, idx) in db.about.grants" :key="idx" class="p-3 bg-white dark:bg-stone-900 border border-stone-200/20 rounded-sm flex flex-col">
                             <div class="flex justify-between items-start">
                                 <span class="font-medium text-charcoal dark:text-stone-200">{{ grant.title[lang] }}</span>
-                                <span class="text-stone-400 shrink-0 ml-4 text-[11px]">{{ grant.year }}</span>
+                                <span class="text-stone-600 shrink-0 ml-4 text-[11px]">{{ grant.year }}</span>
                             </div>
                             <span class="text-[10px] text-stone-500 dark:text-stone-400 mt-1">{{ grant.org[lang] }}</span>
                         </li>
@@ -901,7 +902,7 @@
                         <li v-for="(cert, idx) in db.about.certifications" :key="idx" class="p-3 bg-white dark:bg-stone-900 border border-stone-200/20 rounded-sm flex flex-col">
                             <div class="flex justify-between items-start">
                                 <span class="font-medium text-charcoal dark:text-stone-200">{{ cert.title[lang] }}</span>
-                                <span class="text-stone-400 shrink-0 ml-4 text-[11px]">{{ cert.year }}</span>
+                                <span class="text-stone-600 shrink-0 ml-4 text-[11px]">{{ cert.year }}</span>
                             </div>
                             <span class="text-[10px] text-stone-500 dark:text-stone-400 mt-1">{{ cert.org[lang] }}</span>
                         </li>
@@ -981,7 +982,7 @@
                 <div class="relative w-full">
                     <input type="text" v-model="pubSearchQuery" :placeholder="t.publications.searchPlaceholder" 
                            class="w-full text-xs pl-8 pr-4 py-2 bg-white dark:bg-stone-800 border border-stone-200 dark:border-stone-700 focus:border-bronze outline-none transition-colors rounded-xs dark:text-stone-200">
-                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-stone-400 text-[10px]"></i>
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-stone-600 text-[10px]"></i>
                 </div>
             </div>
 
@@ -1021,7 +1022,7 @@
                     </div>
 
                     <div class="mt-4 pt-4 border-t border-stone-100 dark:border-stone-800">
-                        <button @click="pub.showAbstract = !pub.showAbstract" class="text-[11px] text-stone-400 hover:text-bronze flex items-center gap-1 font-medium">
+                        <button @click="pub.showAbstract = !pub.showAbstract" class="text-[11px] text-stone-600 hover:text-bronze flex items-center gap-1 font-medium">
                             <span>{{ pub.showAbstract ? t.publications.hideAbstract : t.publications.showAbstract }}</span>
                             <i :class="pub.showAbstract ? 'fa-solid fa-chevron-up' : 'fa-solid fa-chevron-down'"></i>
                         </button>
@@ -1044,12 +1045,12 @@
             <!-- Subtabs -->
             <div class="flex justify-center space-x-6 mb-12 border-b border-stone-200 dark:border-stone-800">
                 <button @click="mediaSubTab = 'gallery'" 
-                        :class="mediaSubTab === 'gallery' ? 'border-b-2 border-bronze text-bronze font-bold' : 'text-stone-400 dark:text-stone-400 hover:text-stone-600 dark:hover:text-stone-300'"
+                        :class="mediaSubTab === 'gallery' ? 'border-b-2 border-bronze text-bronze font-bold' : 'text-stone-600 dark:text-stone-400 hover:text-stone-600 dark:hover:text-stone-300'"
                         class="pb-3 text-xs tracking-widest uppercase transition-all">
                     {{ t.media.gallery }}
                 </button>
                 <button @click="mediaSubTab = 'videos'" 
-                        :class="mediaSubTab === 'videos' ? 'border-b-2 border-bronze text-bronze font-bold' : 'text-stone-400 dark:text-stone-400 hover:text-stone-600 dark:hover:text-stone-300'"
+                        :class="mediaSubTab === 'videos' ? 'border-b-2 border-bronze text-bronze font-bold' : 'text-stone-600 dark:text-stone-400 hover:text-stone-600 dark:hover:text-stone-300'"
                         class="pb-3 text-xs tracking-widest uppercase transition-all">
                     {{ t.media.videos }}
                 </button>
@@ -1057,68 +1058,15 @@
 
             <!-- GALLERY VIEW -->
             <div v-show="mediaSubTab === 'gallery'">
-                <div class="mb-8 max-w-3xl mx-auto">
-                    <!-- Mobile: All full width on top, rest in 2x2 equal grid -->
-                    <div class="md:hidden space-y-2">
-                        <button @click="activeGalleryCat = 'All'"
-                                :class="activeGalleryCat === 'All' ? 'bg-bronze text-white border-bronze' : 'bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700'"
-                                class="w-full min-h-[2.5rem] px-3 py-2 rounded-xs text-[10px] tracking-wider transition-all font-medium text-center">
-                            {{ t.media.allCategories }}
-                        </button>
-                        <div class="grid grid-cols-2 gap-2">
-                            <button v-for="cat in galleryCategories.filter(c => c !== 'All')" :key="'mob-'+cat"
-                                    @click="activeGalleryCat = cat"
-                                    :class="activeGalleryCat === cat ? 'bg-bronze text-white border-bronze' : 'bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-stone-700'"
-                                    class="w-full min-h-[2.5rem] px-2 py-2 rounded-xs text-[10px] tracking-wider transition-all font-medium text-center flex items-center justify-center">
-                                {{ cat }}
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Desktop -->
-                    <div class="hidden md:flex flex-wrap gap-2 justify-center">
-                        <button v-for="cat in galleryCategories" :key="cat" 
-                                @click="activeGalleryCat = cat"
-                                :class="activeGalleryCat === cat ? 'bg-bronze text-white' : 'bg-white dark:bg-stone-800 text-stone-600 dark:text-stone-300'"
-                                class="px-3 py-1.5 rounded-xs text-[10px] tracking-wider transition-all">
-                            {{ cat === 'All' ? t.media.allCategories : cat }}
-                        </button>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div v-for="(img, idx) in filteredGallery" :key="idx" 
-                         @click="handleGalleryClick(filteredGallery, idx)"
-                         class="group relative overflow-hidden rounded-sm aspect-square bg-stone-200 dark:bg-stone-900 cursor-pointer shadow-xs border border-stone-200 dark:border-stone-800">
-                        <img :src="getGalleryCoverUrl(img)" :alt="img.title[lang]" loading="lazy" decoding="async" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105">
-                        <div v-if="getGalleryPhotoCount(img) > 1" class="absolute top-3 left-3 bg-charcoal/80 text-white text-[9px] font-bold px-2 py-1 rounded-sm">
-                            +{{ getGalleryPhotoCount(img) - 1 }}
-                        </div>
-                        <div class="absolute inset-0 bg-charcoal/75 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-4">
-                            <span class="text-[9px] uppercase tracking-wider text-bronze-light font-bold mb-1">
-                                {{ img.category }} <span v-if="img.type === 'youtube'">| <i class="fa-brands fa-youtube"></i> Video</span>
-                            </span>
-                            <h4 class="text-white font-serif font-semibold text-sm">{{ img.title[lang] }}</h4>
-                            <p class="text-[10px] text-stone-300 dark:text-stone-400 mt-1 font-light line-clamp-2">{{ img.desc[lang] }}</p>
-                            <span class="text-[9px] text-stone-400 mt-1">{{ img.date }}</span>
-                        </div>
-                        <!-- Play button overlay if YouTube type -->
-                        <div v-if="img.type === 'youtube'" class="absolute top-3 right-3 bg-red-600 text-white rounded-full p-2 text-xs flex items-center justify-center w-7 h-7 shadow-lg">
-                            <i class="fa-solid fa-play ml-0.5"></i>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Instagram CTA -->
-                <div class="mt-10 flex flex-col items-center justify-center text-center gap-4 py-10 px-6 border border-stone-200 dark:border-stone-800 rounded-sm bg-stone-50/60 dark:bg-stone-900/40">
-                    <i class="fa-brands fa-instagram text-4xl text-bronze"></i>
-                    <p class="text-sm text-charcoal-light dark:text-stone-300 font-light max-w-md">
-                        {{ lang === 'ko' ? '더 많은 사진과 소식은 인스타그램에서 만나보실 수 있습니다.' : 'For more photos and updates, visit my Instagram.' }}
+                <div class="flex flex-col items-center justify-center text-center gap-5 py-16 px-6 border border-stone-200 dark:border-stone-800 rounded-sm bg-stone-50/60 dark:bg-stone-900/40">
+                    <i class="fa-brands fa-instagram text-5xl text-bronze"></i>
+                    <p class="text-sm text-charcoal-light dark:text-stone-300 font-light max-w-md leading-relaxed">
+                        {{ lang === 'ko' ? '사진과 소식은 인스타그램에서 바로 보실 수 있습니다.' : 'Photos and updates are available directly on Instagram.' }}
                     </p>
                     <a :href="db.profile.instagram" target="_blank" rel="noopener"
                        class="inline-flex items-center gap-2 px-6 py-3 bg-bronze hover:bg-bronze-dark text-white rounded-sm text-sm font-semibold transition-colors">
                         <i class="fa-brands fa-instagram"></i>
-                        {{ lang === 'ko' ? '인스타그램에서 더 보기' : 'See more on Instagram' }}
+                        {{ lang === 'ko' ? '인스타그램 바로가기' : 'Go to Instagram' }}
                     </a>
                 </div>
             </div>
@@ -1153,7 +1101,7 @@
                         </div>
                         <div class="p-4 space-y-1">
                             <h4 class="serif-font font-bold text-xs text-charcoal dark:text-stone-100 line-clamp-2">{{ video.title[lang] }}</h4>
-                            <p class="text-[10px] text-stone-400 font-light">{{ localized(video.desc, lang) }}</p>
+                            <p class="text-[10px] text-stone-600 font-light">{{ localized(video.desc, lang) }}</p>
                         </div>
                     </div>
                 </div>
@@ -1238,9 +1186,9 @@
         <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6 text-stone-500 dark:text-stone-400">
             <div class="text-center md:text-left">
                 <p class="font-serif font-bold text-charcoal dark:text-stone-100">{{ t.footer.nameLine }}</p>
-                <p class="text-[10px] text-stone-400 mt-0.5">{{ t.footer.tagline }}</p>
+                <p class="text-[10px] text-stone-600 mt-0.5">{{ t.footer.tagline }}</p>
             </div>
-            <p class="text-[10px] text-stone-400 text-center md:text-right">
+            <p class="text-[10px] text-stone-600 text-center md:text-right">
                 {{ t.footer.copyright }}
             </p>
         </div>
@@ -1279,9 +1227,9 @@
                     <h3 class="serif-font font-bold text-xs text-charcoal dark:text-stone-200 line-clamp-1">
                         {{ pdfViewer.pub.title[lang] }}
                     </h3>
-                    <p class="text-[10px] text-stone-400 mt-0.5">{{ pdfViewer.pub.authors[lang] }} | {{ pdfViewer.pub.journal[lang] }}</p>
+                    <p class="text-[10px] text-stone-600 mt-0.5">{{ pdfViewer.pub.authors[lang] }} | {{ pdfViewer.pub.journal[lang] }}</p>
                 </div>
-                <button @click="closePdfViewer" class="text-stone-400 hover:text-charcoal dark:hover:text-stone-200">
+                <button @click="closePdfViewer" class="text-stone-600 hover:text-charcoal dark:hover:text-stone-200">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
@@ -1303,7 +1251,7 @@
                 <div v-else class="h-full p-6 overflow-y-auto">
                     <div class="max-w-2xl mx-auto bg-white shadow-sm p-12 text-stone-800 space-y-6 font-serif text-xs leading-relaxed select-none relative">
                         <div class="text-center border-b border-stone-200 pb-6">
-                            <span class="text-[10px] text-stone-400 uppercase tracking-widest block">{{ pdfViewer.pub.journal[lang] }} • Year {{ pdfViewer.pub.year }}</span>
+                            <span class="text-[10px] text-stone-600 uppercase tracking-widest block">{{ pdfViewer.pub.journal[lang] }} • Year {{ pdfViewer.pub.year }}</span>
                             <h1 class="text-lg font-bold mt-2 text-stone-900 leading-snug">{{ pdfViewer.pub.title[lang] }}</h1>
                             <p class="text-xs text-stone-500 mt-3">{{ pdfViewer.pub.authors[lang] }}</p>
                         </div>
@@ -1311,7 +1259,7 @@
                         <div class="bg-stone-50 p-4 border-l border-bronze/50 rounded-r text-xs font-sans space-y-1.5 italic">
                             <span class="font-bold uppercase tracking-wider text-[10px] block not-italic">{{ t.pdf.abstractLabel }}</span>
                             <p class="text-stone-600 leading-relaxed font-light">{{ pdfViewer.pub.abstract[lang] }}</p>
-                            <div class="text-[9px] not-italic text-stone-400 pt-1">
+                            <div class="text-[9px] not-italic text-stone-600 pt-1">
                                 <strong>{{ t.pdf.keywordsLabel }}</strong> {{ pdfViewer.pub.keywords[lang].join(', ') }}
                             </div>
                         </div>
@@ -1328,7 +1276,7 @@
                 </div>
             </div>
 
-            <div class="p-4 border-t border-stone-200 dark:border-stone-800 flex justify-between items-center bg-stone-50 dark:bg-stone-950 text-xs text-stone-400">
+            <div class="p-4 border-t border-stone-200 dark:border-stone-800 flex justify-between items-center bg-stone-50 dark:bg-stone-950 text-xs text-stone-600">
                 <span>{{ t.pdf.pageInfo }}</span>
                 <a v-if="pdfViewer.pub.pdfUrl && pdfViewer.pub.pdfSource === 'file'" :href="pdfViewer.pub.pdfUrl" download class="px-3 py-1.5 bg-bronze hover:bg-bronze-dark text-white rounded-xs transition-colors flex items-center gap-1.5 text-[11px] font-semibold">
                     <i class="fa-solid fa-download"></i> {{ t.pdf.downloadLabel }}
@@ -1358,7 +1306,7 @@
                 <div class="text-center mt-3 px-2 shrink-0">
                     <span class="text-[9px] uppercase text-bronze-light font-bold tracking-wider">{{ lightbox.images[lightbox.index].category }}</span>
                     <h3 class="serif-font text-white font-semibold text-sm mt-1">{{ lightbox.images[lightbox.index].title[lang] }}</h3>
-                    <p class="text-xs text-stone-400 mt-1 font-light line-clamp-2">{{ lightbox.images[lightbox.index].desc[lang] }}</p>
+                    <p class="text-xs text-stone-600 mt-1 font-light line-clamp-2">{{ lightbox.images[lightbox.index].desc[lang] }}</p>
                     <p v-if="lightbox.images.length > 1" class="text-[10px] text-bronze-light mt-2 font-semibold">{{ lightbox.index + 1 }} / {{ lightbox.images.length }}</p>
                     <p class="text-[10px] text-stone-500 mt-0.5">{{ lightbox.images[lightbox.index].date }}</p>
                 </div>
@@ -1431,7 +1379,7 @@
                         <i class="fa-solid fa-eye"></i>
                         <span class="hidden sm:inline">{{ admin.showPreview ? (lang === 'ko' ? '미리보기 끄기' : 'Hide Preview') : (lang === 'ko' ? '미리보기' : 'Preview') }}</span>
                     </button>
-                    <button @click="closeAdminPanel" class="text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 p-1">
+                    <button @click="closeAdminPanel" class="text-stone-600 hover:text-stone-700 dark:hover:text-stone-200 p-1">
                         <i class="fa-solid fa-xmark text-lg"></i>
                     </button>
                 </div>
@@ -1448,7 +1396,7 @@
                             {{ sec.label }}
                         </button>
                     </div>
-                    <div class="space-y-1 text-[9px] text-stone-400 leading-tight">
+                    <div class="space-y-1 text-[9px] text-stone-600 leading-tight">
                         <p class="font-semibold text-emerald-600 dark:text-emerald-400"><i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i> 자동 WebP 압축 탑재</p>
                         <p>고해상도 이미지를 업로드할 시, 브라우저가 최대 너비 1200px의 가벼운 **WebP 포맷**으로 실시간 리사이징 및 손실 압축 가공합니다.</p>
                     </div>
@@ -1557,7 +1505,7 @@
                         </div>
 
                         <div class="pt-6 border-t border-stone-200 dark:border-stone-700 space-y-6">
-                            <p class="text-[10px] text-stone-400 leading-relaxed max-w-2xl">
+                            <p class="text-[10px] text-stone-600 leading-relaxed max-w-2xl">
                                 {{ lang === 'ko'
                                     ? 'About 페이지 하단의 「대외 수상 및 인정」「학술 기금 및 연구 용역」 목록입니다. ↑ ↓ 로 표시 순서를 바꿀 수 있습니다.'
                                     : 'Awards and grants shown at the bottom of the About page. Use ↑ ↓ to reorder.' }}
@@ -1568,7 +1516,7 @@
                                     <h3 class="serif-font font-bold text-sm text-bronze">{{ t.about.awards }}</h3>
                                     <button type="button" @click="addNewAward" class="bg-bronze hover:bg-bronze-dark text-white px-3 py-1 rounded-sm text-[11px]">+ Add Award</button>
                                 </div>
-                                <div v-if="!db.about.awards.length" class="text-[11px] text-stone-400 italic py-2">항목 없음</div>
+                                <div v-if="!db.about.awards.length" class="text-[11px] text-stone-600 italic py-2">항목 없음</div>
                                 <div class="space-y-4">
                                     <div v-for="(award, idx) in db.about.awards" :key="'adm-award-'+idx" class="p-4 border border-stone-200 rounded bg-stone-50 dark:bg-stone-900 space-y-3">
                                         <div class="flex items-center justify-between gap-3 pb-2 border-b border-stone-200/80 dark:border-stone-700/80">
@@ -1612,7 +1560,7 @@
                                     <h3 class="serif-font font-bold text-sm text-bronze">{{ t.about.grants }}</h3>
                                     <button type="button" @click="addNewGrant" class="bg-bronze hover:bg-bronze-dark text-white px-3 py-1 rounded-sm text-[11px]">+ Add Grant</button>
                                 </div>
-                                <div v-if="!db.about.grants.length" class="text-[11px] text-stone-400 italic py-2">항목 없음</div>
+                                <div v-if="!db.about.grants.length" class="text-[11px] text-stone-600 italic py-2">항목 없음</div>
                                 <div class="space-y-4">
                                     <div v-for="(grant, idx) in db.about.grants" :key="'adm-grant-'+idx" class="p-4 border border-stone-200 rounded bg-stone-50 dark:bg-stone-900 space-y-3">
                                         <div class="flex items-center justify-between gap-3 pb-2 border-b border-stone-200/80 dark:border-stone-700/80">
@@ -1669,7 +1617,7 @@
                                 + Add Publication
                             </button>
                         </div>
-                        <p class="text-[10px] text-stone-400 leading-relaxed max-w-2xl">
+                        <p class="text-[10px] text-stone-600 leading-relaxed max-w-2xl">
                             {{ lang === 'ko'
                                 ? '↑ ↓ 버튼으로 논문 표시 순서를 바꿀 수 있습니다. 위쪽 항목이 목록·홈에 먼저 표시됩니다.'
                                 : 'Use ↑ ↓ to reorder publications. Items at the top appear first in lists and on the home page.' }}
@@ -1782,7 +1730,7 @@
 
                     <!-- ADMIN: TIMELINE -->
                     <div v-if="admin.activeSection === 'timeline'" class="space-y-6">
-                        <p class="text-[10px] text-stone-400 leading-relaxed max-w-2xl">
+                        <p class="text-[10px] text-stone-600 leading-relaxed max-w-2xl">
                             {{ lang === 'ko'
                                 ? '↑ ↓ 버튼으로 표시 순서를 바꿀 수 있습니다. 목록 위쪽 항목이 홈 화면에서 먼저 보입니다.'
                                 : 'Use ↑ ↓ to reorder entries. Items at the top appear first on the home page.' }}
@@ -1879,7 +1827,7 @@
                                 + Add Experience
                             </button>
                         </div>
-                        <p class="text-[10px] text-stone-400 leading-relaxed max-w-2xl">
+                        <p class="text-[10px] text-stone-600 leading-relaxed max-w-2xl">
                             {{ lang === 'ko'
                                 ? '↑ ↓ 버튼으로 경력 카드 순서를 바꿀 수 있습니다. 같은 카테고리 탭 안에서 위쪽 항목이 먼저 표시됩니다.'
                                 : 'Use ↑ ↓ to reorder experience cards. Within each category tab, top items appear first.' }}
@@ -1952,7 +1900,7 @@
                             </button>
                         </div>
 
-                        <p v-if="db.media.gallery.length" class="text-[10px] text-stone-400 leading-relaxed max-w-2xl">
+                        <p v-if="db.media.gallery.length" class="text-[10px] text-stone-600 leading-relaxed max-w-2xl">
                             {{ lang === 'ko'
                                 ? '↑ ↓ 버튼으로 갤러리 표시 순서를 바꿀 수 있습니다. 위쪽 항목이 미디어·홈에 먼저 표시됩니다.'
                                 : 'Use ↑ ↓ to reorder gallery items. Top items appear first in Media and on the home page.' }}
@@ -2025,9 +1973,9 @@
                                             <input type="file" @change="onGalleryPhotosUpload($event, idx)" accept="image/*" multiple class="hidden">
                                         </label>
                                     </div>
-                                    <p class="text-[10px] text-stone-400 mb-3">{{ lang === 'ko' ? '대표 사진을 선택하면 갤러리 썸네일로 표시됩니다.' : 'Select a cover photo for the gallery thumbnail.' }}</p>
+                                    <p class="text-[10px] text-stone-600 mb-3">{{ lang === 'ko' ? '대표 사진을 선택하면 갤러리 썸네일로 표시됩니다.' : 'Select a cover photo for the gallery thumbnail.' }}</p>
 
-                                    <div v-if="!img.photos || !img.photos.length" class="aspect-video w-full rounded border border-dashed border-stone-300 dark:border-stone-600 bg-stone-50 dark:bg-stone-900 flex flex-col items-center justify-center text-stone-400 gap-2">
+                                    <div v-if="!img.photos || !img.photos.length" class="aspect-video w-full rounded border border-dashed border-stone-300 dark:border-stone-600 bg-stone-50 dark:bg-stone-900 flex flex-col items-center justify-center text-stone-600 gap-2">
                                         <i class="fa-regular fa-images text-xl"></i>
                                         <span class="text-[10px]">{{ lang === 'ko' ? '사진을 업로드하세요' : 'Upload photos' }}</span>
                                     </div>
@@ -2066,7 +2014,7 @@
                                     + Add YouTube Video
                                 </button>
                             </div>
-                            <p class="text-[10px] text-stone-400 leading-relaxed max-w-2xl mb-4">
+                            <p class="text-[10px] text-stone-600 leading-relaxed max-w-2xl mb-4">
                                 {{ lang === 'ko'
                                     ? '↑ ↓ 버튼으로 영상 표시 순서를 바꿀 수 있습니다. 위쪽 항목이 미디어 페이지에 먼저 표시됩니다.'
                                     : 'Use ↑ ↓ to reorder videos. Top items appear first on the Media page.' }}
@@ -2110,10 +2058,10 @@
                                     </div>
 
                                     <div class="rounded border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 p-3">
-                                        <span class="text-[9px] font-bold text-stone-400 mb-2 uppercase block">Thumbnail Preview</span>
+                                        <span class="text-[9px] font-bold text-stone-600 mb-2 uppercase block">Thumbnail Preview</span>
                                         <div class="aspect-video w-full rounded overflow-hidden bg-stone-100 dark:bg-stone-800 border border-stone-200 dark:border-stone-700">
                                             <img v-if="video.youtubeId" :src="youtubeThumb(video.youtubeId)" referrerpolicy="strict-origin-when-cross-origin" @error="onYoutubeThumbError($event, video.youtubeId)" class="w-full h-full object-cover">
-                                            <div v-else class="w-full h-full flex items-center justify-center text-stone-400 text-[10px]">No Link</div>
+                                            <div v-else class="w-full h-full flex items-center justify-center text-stone-600 text-[10px]">No Link</div>
                                         </div>
                                     </div>
 
@@ -2143,7 +2091,7 @@
                     <div v-if="admin.activeSection === 'copy'" class="space-y-8">
                         <div>
                             <h3 class="serif-font font-bold text-sm text-bronze mb-1">Site Labels & UI Text</h3>
-                            <p class="text-[10px] text-stone-400 mb-4">메뉴, 섹션 제목, 버튼, 푸터 등 페이지에 표시되는 고정 문구를 편집합니다. (KO / EN)</p>
+                            <p class="text-[10px] text-stone-600 mb-4">메뉴, 섹션 제목, 버튼, 푸터 등 페이지에 표시되는 고정 문구를 편집합니다. (KO / EN)</p>
                         </div>
 
                         <div class="space-y-6">
@@ -2359,7 +2307,7 @@
                     <!-- ADMIN: PASSWORD -->
                     <div v-if="admin.activeSection === 'security'" class="space-y-4 max-w-md">
                         <h3 class="serif-font font-bold text-sm text-bronze mb-1">Admin Password</h3>
-                        <p class="text-[10px] text-stone-400 mb-4">
+                        <p class="text-[10px] text-stone-600 mb-4">
                             {{ lang === 'ko'
                                 ? '문의 탭에서 5번 탭한 뒤 입력하는 관리자 비밀번호입니다. 변경 후 하단 [저장]으로 HTML 파일에도 반영할 수 있습니다.'
                                 : 'Password required after tapping Contact 5 times. Use Save below to persist to your HTML file.' }}
@@ -2418,7 +2366,7 @@
                                     <input type="checkbox" v-model="pub.showOnHome" class="accent-bronze mt-0.5 shrink-0">
                                     <span><strong class="text-bronze">{{ pub.year }}</strong> — {{ pub.title.ko || pub.title.en }}</span>
                                 </label>
-                                <p v-if="!db.publications.length" class="text-xs text-stone-400">등록된 논문이 없습니다.</p>
+                                <p v-if="!db.publications.length" class="text-xs text-stone-600">등록된 논문이 없습니다.</p>
                             </div>
                         </div>
                         <div>
@@ -2426,17 +2374,17 @@
                             <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
                                 <label v-for="(img, idx) in db.media.gallery" :key="'home-pick-med-'+idx" class="flex items-start gap-2 p-3 border border-stone-200 dark:border-stone-800 rounded bg-white dark:bg-stone-900 text-xs cursor-pointer">
                                     <input type="checkbox" v-model="img.showOnHome" class="accent-bronze mt-0.5 shrink-0">
-                                    <span>{{ img.title.ko || img.title.en }} <span class="text-stone-400">({{ img.category }})</span></span>
+                                    <span>{{ img.title.ko || img.title.en }} <span class="text-stone-600">({{ img.category }})</span></span>
                                 </label>
                             </div>
-                            <p v-if="!db.media.gallery.length" class="text-xs text-stone-400 mt-2">등록된 갤러리 항목이 없습니다.</p>
+                            <p v-if="!db.media.gallery.length" class="text-xs text-stone-600 mt-2">등록된 갤러리 항목이 없습니다.</p>
                         </div>
                     </div>
 
                     
                     <div v-if="admin.activeSection === 'settings'" class="space-y-4 max-w-md">
                         <h3 class="serif-font font-bold text-sm text-bronze mb-1">Site Settings</h3>
-                        <p class="text-[10px] text-stone-400 mb-4">
+                        <p class="text-[10px] text-stone-600 mb-4">
                             {{ lang === 'ko'
                                 ? '사이트를 처음 열 때 표시할 기본 언어를 선택합니다. 방문자가 언어 전환 버튼을 누르면 해당 탭에서는 선택한 언어가 유지됩니다.'
                                 : 'Choose the default language shown when visitors first open the site. If they use the language toggle, that choice persists for the session.' }}
@@ -2461,7 +2409,7 @@
                                     class="px-4 py-2 border border-bronze/40 hover:bg-bronze/10 text-bronze rounded-sm text-xs font-semibold tracking-wider">
                                 {{ lang === 'ko' ? '지금 이 언어로 미리보기' : 'Preview with this language' }}
                             </button>
-                            <p class="text-[10px] text-stone-400">
+                            <p class="text-[10px] text-stone-600">
                                 {{ lang === 'ko'
                                     ? '변경 사항을 유지하려면 하단 [저장]을 눌러 주세요.'
                                     : 'Click Save below to persist this setting.' }}
@@ -2473,7 +2421,7 @@
                                 <h4 class="font-bold text-xs text-stone-600 dark:text-stone-400 mb-2 uppercase tracking-wider">
                                     {{ lang === 'ko' ? '인트로 화면 · Intro Screen' : 'Intro Screen' }}
                                 </h4>
-                                <p class="text-[10px] text-stone-400 leading-relaxed mb-3">
+                                <p class="text-[10px] text-stone-600 leading-relaxed mb-3">
                                     {{ lang === 'ko'
                                         ? '사이트 최초 진입 시 전체 화면 인트로를 표시한 뒤, 버튼 클릭(또는 자동)으로 홈으로 이동합니다.'
                                         : 'Show a full-screen intro on entry, then go to Home via button or auto timer.' }}
@@ -2547,7 +2495,7 @@
                                     {{ lang === 'ko' ? '발송 OFF' : 'Live email OFF' }}
                                 </span>
                             </div>
-                            <p class="text-[10px] text-stone-400 leading-relaxed">
+                            <p class="text-[10px] text-stone-600 leading-relaxed">
                                 {{ lang === 'ko'
                                     ? 'Web3Forms 키를 등록하면 Contact 페이지 문의가 실제 이메일로 전달됩니다. 변경 후 [저장]을 눌러 HTML 파일에 반영하세요.'
                                     : 'Register a Web3Forms key to deliver Contact submissions to your inbox. Click Save to persist changes.' }}
@@ -2580,7 +2528,7 @@
                                     web3forms.com ↗
                                 </a>
                             </div>
-                            <div v-if="db.settings.contactForm.mode === 'mailto'" class="text-[10px] text-stone-400 leading-relaxed">
+                            <div v-if="db.settings.contactForm.mode === 'mailto'" class="text-[10px] text-stone-600 leading-relaxed">
                                 {{ lang === 'ko'
                                     ? '제출 시 방문자의 메일 앱이 열립니다. Profile에 등록된 이메일(' + db.profile.email + ')로 보내도록 안내됩니다.'
                                     : 'Submit opens the visitor\'s email app addressed to ' + db.profile.email }}
@@ -2593,7 +2541,7 @@
 
             <div class="p-4 border-t border-stone-200 dark:border-stone-800 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 bg-stone-50 dark:bg-stone-950 shrink-0">
                 <div class="space-y-2">
-                    <p class="text-[10px] text-stone-400 max-w-md">
+                    <p class="text-[10px] text-stone-600 max-w-md">
                         {{ t.admin.saveHint }}
                     </p>
                     <button v-if="canLinkHtmlFile" @click="linkHtmlFile" type="button" class="text-[10px] text-bronze hover:underline">
@@ -2629,7 +2577,7 @@
                         Preview
                     </span>
                     <span class="text-xs font-semibold text-stone-100">{{ lang === 'ko' ? '실시간 미리보기' : 'Live Preview' }}</span>
-                    <span class="text-[10px] text-stone-400 hidden sm:inline">{{ lang === 'ko' ? '편집 내용 즉시 반영' : 'Edits update instantly' }}</span>
+                    <span class="text-[10px] text-stone-600 hidden sm:inline">{{ lang === 'ko' ? '편집 내용 즉시 반영' : 'Edits update instantly' }}</span>
                 </div>
                 <div class="flex flex-wrap items-center gap-1.5">
                     <button v-for="p in adminPreviewPages" :key="p.id"
@@ -2708,6 +2656,19 @@
                 <strong style="display:block;margin-bottom:0.5rem;color:#9E7E55;">페이지 로드 실패</strong>
                 ${message}
                 <br><button type="button" onclick="location.reload()">새로고침</button>
+
+                <!-- YouTube channel CTA -->
+                <div class="flex flex-col items-center justify-center text-center gap-4 py-10 px-6 border border-stone-200 dark:border-stone-800 rounded-sm bg-stone-50/60 dark:bg-stone-900/40">
+                    <i class="fa-brands fa-youtube text-4xl text-red-600"></i>
+                    <p class="text-sm text-charcoal-light dark:text-stone-300 font-light max-w-md leading-relaxed">
+                        {{ lang === 'ko' ? '여기 실린 영상은 일부이며, 더 많은 영상은 유튜브 채널에서 보실 수 있습니다.' : 'These are a few selected videos. More are available on my YouTube channel.' }}
+                    </p>
+                    <a :href="db.profile.youtube" target="_blank" rel="noopener"
+                       class="inline-flex items-center gap-2 px-6 py-3 bg-bronze hover:bg-bronze-dark text-white rounded-sm text-sm font-semibold transition-colors">
+                        <i class="fa-brands fa-youtube"></i>
+                        {{ lang === 'ko' ? '유튜브 채널 바로가기' : 'Go to YouTube Channel' }}
+                    </a>
+                </div>
             </div>`;
         document.body.appendChild(wrap);
     };
@@ -2725,11 +2686,11 @@
                         },
                         charcoal: {
                             DEFAULT: '#242424',
-                            light: '#555555',
+                            light: '#3F3F3F',
                             dark: '#E0E0E0'
                         },
                         bronze: {
-                            DEFAULT: '#9E7E55',
+                            DEFAULT: '#8A6A42',
                             light: '#BFA683',
                             dark: '#7D5F3A'
                         }
@@ -4945,8 +4906,8 @@
                 "youtubeId": "5oMsdt1MmIg",
                 "tempUrl": "https://www.youtube.com/watch?v=5oMsdt1MmIg",
                 "title": {
-                    "ko": "영상 1",
-                    "en": "Video 1"
+                    "ko": "랜선 국악 박물관 - 교과서 속 '전통성악' 민요, 정가, 가야금병창 편",
+                    "en": "Online Gugak Museum – Traditional Korean Vocal Music in Textbooks: Minyo, Jeongga, and Gayageum Byeongchang"
                 },
                 "desc": {
                     "ko": "",
@@ -4958,8 +4919,8 @@
                 "youtubeId": "9V_zaRJLU6E",
                 "tempUrl": "https://www.youtube.com/watch?v=9V_zaRJLU6E",
                 "title": {
-                    "ko": "영상 2",
-                    "en": "Video 2"
+                    "ko": "[국악가창 2탄] 전문가처럼 민요 부르기! 지역별 민요 시김새 표현법",
+                    "en": "[Gugak Singing Vol. 2] Sing Folk Songs Like a Pro! Regional Sigimsae Ornamentation Techniques"
                 },
                 "desc": {
                     "ko": "",
@@ -4971,8 +4932,8 @@
                 "youtubeId": "ry18z_frjso",
                 "tempUrl": "https://www.youtube.com/watch?v=ry18z_frjso",
                 "title": {
-                    "ko": "영상 3",
-                    "en": "Video 3"
+                    "ko": "교과서 전래동요 '수박장수'",
+                    "en": "Traditional Children's Song from the Textbook: \"The Watermelon Seller\""
                 },
                 "desc": {
                     "ko": "",
@@ -4984,8 +4945,8 @@
                 "youtubeId": "ITbsGeoYZtQ",
                 "tempUrl": "https://www.youtube.com/watch?v=ITbsGeoYZtQ",
                 "title": {
-                    "ko": "영상 4",
-                    "en": "Video 4"
+                    "ko": " [자막/전래동요] '파주 다리빼기', '황해도 다리빼기' 같은 놀이 다른 노래",
+                    "en": "[Subtitled / Traditional Children's Song] \"Daribbaegi\" from Paju and Hwanghae-do: Same Game, Different Songs"
                 },
                 "desc": {
                     "ko": "",
@@ -4997,8 +4958,8 @@
                 "youtubeId": "akVSCHB-zEs",
                 "tempUrl": "https://www.youtube.com/watch?v=akVSCHB-zEs",
                 "title": {
-                    "ko": "영상 5",
-                    "en": "Video 5"
+                    "ko": " 경기민요 얼카덩어리 (팔탄농요)",
+                    "en": "Gyeonggi Folk Song \"Eolka Deong-eori\" (Paltan Farming Song)"
                 },
                 "desc": {
                     "ko": "",
@@ -5010,8 +4971,8 @@
                 "youtubeId": "VLcOdSClNLU",
                 "tempUrl": "https://www.youtube.com/watch?v=VLcOdSClNLU",
                 "title": {
-                    "ko": "영상 6",
-                    "en": "Video 6"
+                    "ko": "이날치 '좌우나졸' 토끼가 아니고 개라고?",
+                    "en": "Leenalchi's \"Jwau Najol\": A Dog, Not a Rabbit?!"
                 },
                 "desc": {
                     "ko": "",
@@ -5310,7 +5271,7 @@
                 "en": "Enter"
             }
         },
-        "savedAt": "2026-07-23T04:28:01.185Z"
+        "savedAt": "2026-07-23T12:58:00.606Z"
     }
 };
 
